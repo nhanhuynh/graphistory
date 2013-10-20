@@ -1,5 +1,7 @@
 import sqlite3
 import sys
+import urllib.parse
+import os.path
 
 #####
 # Purpose of module:
@@ -7,31 +9,49 @@ import sys
 #####
 
 ###
-# Getting history file(s)
+# Get history file and extracting data
+# takes: history file from a web browser in sqlite format (currently, only Firefox is supported)
+# returns: list of tuples from output of SQL query
 ###
 
 def hist_read(histloc):
-    #This is where reading the history file and getting the proper data in the proper order goes
-    #Chromium/Chrome and Firefox both use sqlite for their history, IE uses what would appear to be a binary blob and may not be supported by project deadline, Safari currently unknown (though since it's also Webkit, I wouldn't be surprised if it's similar to Chromium)
+    #Chromium/Chrome and Firefox both use sqlite for their history, IE uses what would appear to be a binary blob, and Safari uses plist files for history; IE and Safari may not be supported by project deadline
+    histloc = os.path.abspath(os.path.expanduser(histloc))
     conn = sqlite3.connect(histloc) #I think there's a better way to do this with os.path, but this'll do for now
+    count = conn.execute("SELECT COUNT(*) FROM sqlite_master WHERE tbl_name LIKE 'moz_%';").fetchall()[0][0]
     #New history sqlite formats can be added into the following conditional
-    if conn.execute("SELECT * FROM sqlite_master WHERE tbl_name LIKE 'moz_%';").rowcount > 0:
-        hist_data = conn.execute("SELECT moz_historyvisits.id, mox_places.url, moz_places.visit_count, moz_historyvisits.from_visit FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id;").fetchall()
+    if count > 0:
+        hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM moz_places AS tourl, moz_historyvisits AS tohist, moz_places AS fromurl, moz_historyvisits AS fromhist WHERE tourl.id = tohist.place_id AND fromurl.id = fromhist.place_id AND tohist.id = fromhist.from_visit;").fetchall()
     else:
         print("Invalid file. Exiting")
         sys.exit(1)
     return hist_data
 
 ###
-# Creating graph from data
+# Create graph from data
+# takes: list of tuples of output from SQL query
+# returns: list of tuples of form ((fromurl, tourl), count)
 ###
 
-#need to figure out how to take list of tuples of strings, put them together to create a useful graph
 def graphmaker(hist_data):
-    pass #I'll fill this in later when I know how I'm going to do that
+    histcount = dict()
+    for i in hist_data:
+        #format each URL properly, exclude URLs where they are the same domain name
+        #put both URLs in tuple
+        fromurl = urllib.parse.urlparse(i[0])[1]
+        tourl = urllib.parse.urlparse(i[1])[1]
+        if fromurl == tourl:
+            continue
+        fromto = (fromurl, tourl)
+        try:
+            histcount[fromto] += 1
+        except:
+            histcount[fromto] = 1
+    return list(histcount.items())
 
-#Testing the module, currently non-functional without graphmaker() completed
+#This is for testing the module, feel free to ignore/tweak/whatever to do any kind of testing
 if __name__ == "__main__":
-    histloc = input("What file would you like to analyze?\n")
+    histloc = os.path.expanduser(input("What file would you like to analyze?\n"))
     hist_data = hist_read(histloc)
     hist_graph = graphmaker(hist_data)
+    print(hist_graph)
