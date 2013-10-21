@@ -24,7 +24,7 @@ def hist_read(histloc):
     if count_ff > 0:
         hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM moz_places AS tourl, moz_historyvisits AS tohist, moz_places AS fromurl, moz_historyvisits AS fromhist WHERE tourl.id = tohist.place_id AND fromurl.id = fromhist.place_id AND tohist.id = fromhist.from_visit;").fetchall()
     elif count_ch > 0:
-        hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM urls AS fromurl, visits AS fromhist, urls AS tourl, visits AS tohist WHERE tourl.id = tohist.id AND fromurl.id = fromhist.id AND tohist.from_visit = fromhist.id;").fetchall()
+        hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM urls AS fromurl, visits AS fromhist, urls AS tourl, visits AS tohist WHERE tourl.id = tohist.url AND fromurl.id = fromhist.url AND tohist.from_visit = fromhist.id;").fetchall()
     else:
         print("Invalid file. Exiting")
         sys.exit(1)
