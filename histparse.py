@@ -22,9 +22,9 @@ def hist_read(histloc):
     count_ch = conn.execute("SELECT COUNT(*) FROM sqlite_master WHERE name = 'downloads_url_chains';").fetchall()[0][0] #this is not ideal, but Chromium doesn't have any easy branding in the history file
     #New history sqlite formats can be added into the following conditional
     if count_ff > 0:
-        hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM moz_places AS tourl, moz_historyvisits AS tohist, moz_places AS fromurl, moz_historyvisits AS fromhist WHERE tourl.id = tohist.place_id AND fromurl.id = fromhist.place_id AND tohist.id = fromhist.from_visit;").fetchall()
+        hist_data = conn.execute("SELECT moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id ORDER BY moz_historyvisits.visit_date ASC;").fetchall()
     elif count_ch > 0:
-        hist_data = conn.execute("SELECT fromurl.url, tourl.url FROM urls AS fromurl, visits AS fromhist, urls AS tourl, visits AS tohist WHERE tourl.id = tohist.url AND fromurl.id = fromhist.url AND tohist.from_visit = fromhist.id;").fetchall()
+        hist_data = conn.execute("SELECT urls.url FROM urls, visits WHERE urls.id = visits.url ORDER BY visits.visit_time ASC;").fetchall()
     else:
         print("Invalid file. Exiting")
         sys.exit(1)
@@ -38,11 +38,11 @@ def hist_read(histloc):
 
 def graphmaker(hist_data):
     histcount = dict()
-    for i in hist_data:
+    for i in range(len(hist_data) - 1): #strange range to make sure we stay in the bounds of the list
         #format each URL properly, exclude URLs where they are the same domain name
         #put both URLs in tuple
-        fromurl = urllib.parse.urlparse(i[0])[1]
-        tourl = urllib.parse.urlparse(i[1])[1]
+        fromurl = urllib.parse.urlparse(hist_data[i][0])[1]
+        tourl = urllib.parse.urlparse(hist_data[i+1][0])[1]
         if fromurl == tourl:
             continue
         fromto = (fromurl, tourl)
