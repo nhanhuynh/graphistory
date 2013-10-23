@@ -40,12 +40,17 @@ def draw_single(DG, site, multiplier = 100):
 
 
 import networkx as nx
-import matplotlib.pyplot as plt
+import matplotlib.pylab as plt
 DG = nx.DiGraph()
 DG.add_edges_from(( [('facebook', 'cnn',{'weight':5}), ('cnn', 'amazon',{'weight':100}),('cnn', 'paypal',{'weight':10}), ('amazon', 'cnn',{'weight':1}),('cnn', 'facebook',{'weight':20})]))
-# # print dg.edges(data = True)
+draw_single(DG,'cnn')
+
+
+
+
+# # # print dg.edges(data = True)
 # site = 'facebook'
-# multiplier = 10
+# multiplier = 100
 # if not site in DG:
 #         raise Exception("site doesn't exist")
 # # turn into s single graph
@@ -79,7 +84,8 @@ DG.add_edges_from(( [('facebook', 'cnn',{'weight':5}), ('cnn', 'amazon',{'weight
 # for (u,v,d) in tmpGraph.edges(data=True):
 #     edgewidth.append(d['weight'])
 # # nx.draw_networkx_edges(tmpGraph,pos,alpha=0.3,width=edgewidth, edge_color='m')
-# nx.draw_networkx_edges(tmpGraph,pos,alpha=0.3, width=10,edge_color='m')
 # nx.draw_networkx_nodes(tmpGraph,pos,node_color='w',node_size = radius*100,alpha=0.4)
+#
+# nx.draw_networkx_edges(tmpGraph,pos,alpha=0.3, width=10,edge_color='m')
 # nx.draw_networkx_labels(tmpGraph,pos,fontsize=14)
 # plt.show()
