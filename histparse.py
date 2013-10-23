@@ -1,6 +1,6 @@
 import sqlite3
 import sys
-import urllib.parse
+import urlparse
 import os.path
 
 #####
@@ -31,6 +31,17 @@ def hist_read(histloc):
     return hist_data
 
 ###
+# Format URLs to get just the domain name
+# takes: URL
+# returns: domain name
+###
+
+def urlformat(url):
+    temp = list(reversed(urlparse.urlparse(url)[1].split(".")))
+    out = temp[1] + '.' + temp[0]
+    return (out if ((len(out) > 5 and not temp[0].isdigit()) or out == "x.org") else (".".join(reversed(temp)) if temp[0].isdigit() else temp[2] + '.' + out)) #This line recognizes country codes, IPv4 addresses, and the exception that is x.org
+
+###
 # Create graph from data
 # takes: list of tuples of output from SQL query
 # returns: list of tuples of form ((fromurl, tourl), count)
@@ -41,8 +52,8 @@ def graphmaker(hist_data):
     for i in range(len(hist_data) - 1): #strange range to make sure we stay in the bounds of the list
         #format each URL properly, exclude URLs where they are the same domain name
         #put both URLs in tuple
-        fromurl = urllib.parse.urlparse(hist_data[i][0])[1]
-        tourl = urllib.parse.urlparse(hist_data[i+1][0])[1]
+        fromurl = urlformat(hist_data[i][0])
+        tourl = urlformat(hist_data[i+1][0])
         if fromurl == tourl:
             continue
         fromto = (fromurl, tourl)
@@ -54,7 +65,7 @@ def graphmaker(hist_data):
 
 #This is for testing the module, feel free to ignore/tweak/whatever to do any kind of testing
 if __name__ == "__main__":
-    histloc = os.path.expanduser(input("What file would you like to analyze?\n"))
+    histloc = os.path.expanduser(raw_input("What file would you like to analyze?\n"))
     hist_data = hist_read(histloc)
     hist_graph = graphmaker(hist_data)
     print(hist_graph)
