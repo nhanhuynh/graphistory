@@ -29,7 +29,6 @@ class Graphistory:
         radius =[]
         max_weight = 0
         main_node_index = 0
-        print tmpGraph.edges(data =True)
         for node in tmpGraph.nodes():
             if node==site:
                 main_node_index = len(radius)
@@ -43,7 +42,6 @@ class Graphistory:
                 radius.append(weight)
          #make sure radius of main node is always the biggest
         radius[main_node_index] = max_weight * 1.5
-        print radius
         for (u,v,d) in tmpGraph.edges(data=True):
             edgewidth.append(d['weight'])
         # nx.draw_networkx_edges(tmpGraph,pos,alpha=0.3,width=edgewidth, edge_color='m')

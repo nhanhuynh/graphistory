@@ -56,7 +56,6 @@ class Parser:
         for (fromurl, tourl),count in histcount.items():
             fromGraph.add_edge(fromurl, tourl,weight = count)
             toGraph.add_edge(tourl, fromurl, weight = count)
-        print histcount.items(), "hello"
         return (fromGraph, toGraph)
 
 
