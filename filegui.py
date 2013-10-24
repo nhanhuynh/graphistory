@@ -3,6 +3,7 @@ import Tkinter as tk
 import tkFileDialog
 import tkMessageBox
 import ttk
+from Graphistory import Graphistory
 
 window = tk.Tk()
 window.title("Graphistory")
@@ -28,18 +29,17 @@ def browse_win():
 
 browse_button = ttk.Button(mframe, text="Browse", command=browse_win) #...as does this, but at least it has some functionality now
 
-def thing(event):
-    print(event)
-
 def drawgraph(fileloc=''):
     #grab path from path_entry
     #run it through histparse
     #call function to draw graph
     try:
-        if fileloc == '': fileloc = path.get()
+        if fileloc == '': fileloc = str(path.get())
         histgraph = histparse(fileloc)
         #need to pass histgraph to networkx functions
-        print(histgraph)
+        #print(histgraph)
+        g = Graphistory(fileloc)
+        g.draw_from_site("facebook.com")
     except Exception as e:
         tkMessageBox.showerror(message=e)
     pass
