@@ -18,7 +18,9 @@ mframe.columnconfigure(3, pad='1.75i')
 mframe.rowconfigure(0,weight=1)
 
 path = tk.StringVar()
-path_entry = ttk.Entry(mframe, textvariable=path, width=50) #need to add  function when <return> is pushed, sothis needs to be worked with...
+url = tk.StringVar()
+path_entry = ttk.Entry(mframe, textvariable=path, width=50)
+url_entry = ttk.Entry(mframe, textvariable=url, width=50)
 
 def browse_win():
     #open file browser window
@@ -27,7 +29,7 @@ def browse_win():
     pathtmp = tkFileDialog.askopenfilename()
     path.set(pathtmp)
 
-browse_button = ttk.Button(mframe, text="Browse", command=browse_win) #...as does this, but at least it has some functionality now
+browse_button = ttk.Button(mframe, text="Browse", command=browse_win)
 
 def drawgraph(fileloc=''):
     #grab path from path_entry
@@ -39,18 +41,23 @@ def drawgraph(fileloc=''):
         #need to pass histgraph to networkx functions
         #print(histgraph)
         g = Graphistory(fileloc)
-        g.draw_from_site("facebook.com")
+        urlfrom = str(url.get())
+        if(urlfrom == ''):
+            g.draw_from_site("facebook.com")
+        else:
+            g.draw_from_site(urlfrom)
     except Exception as e:
         tkMessageBox.showerror(message=e)
     pass
 
-confirm_button = ttk.Button(mframe, text="Draw!", command=drawgraph) #this part is just flat-out broken, I NEED to get info on how networkx code is going together
+confirm_button = ttk.Button(mframe, text="Draw!", command=drawgraph)
 
 path_entry.bind('<Return>', lambda e: drawgraph())
 
 browse_button.grid(column=1, row=4, padx='1c', pady='0.25c', sticky=tk.E+tk.W)
 confirm_button.grid(column=5, row=4, padx='1c', pady='0.25c', sticky=tk.E+tk.W)
 path_entry.grid(column=1,row=2,padx='1c', pady='0.5c', columnspan=5, sticky=tk.E+tk.W+tk.N+tk.S)
+url_entry.grid(column=1, row=6, padx='1c', pady='0.5c', columnspan=5, sticky=tk.E+tk.W)
 path_entry.focus()
 
 window.mainloop()
