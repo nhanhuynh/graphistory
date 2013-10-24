@@ -25,8 +25,8 @@ class Graphistory:
             for (a) in edges:
                 if a[2]['weight'] < 10 :
                     to_delete.append(a)
-        for item in to_delete:
-            edges.remove(item)
+            for item in to_delete:
+                edges.remove(item)
         # print edges
         tmpGraph = nx.Graph()
         tmpGraph.add_edges_from(edges)
