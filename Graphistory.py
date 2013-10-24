@@ -18,6 +18,15 @@ class Graphistory:
             raise Exception("site doesn't exist")
         # turn into s single graph
         edges = DG.edges(site, data = True)
+
+        #filter out low weighted edge
+        to_delete = list()
+        if len(edges) >15:
+            for (a) in edges:
+                if a[2]['weight'] < 10 :
+                    to_delete.append(a)
+        for item in to_delete:
+            edges.remove(item)
         # print edges
         tmpGraph = nx.Graph()
         tmpGraph.add_edges_from(edges)
