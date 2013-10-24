@@ -25,6 +25,10 @@ url_entry = ttk.Entry(mframe, textvariable=url, width=50)
 path_label = ttk.Label(mframe, text="History file location:")
 url_label = ttk.Label(mframe, text="Site to focus on:")
 
+fromto = tk.IntVar()
+from_rad = ttk.Radiobutton(mframe, value=0, variable=fromto, text="FROM node")
+to_rad = ttk.Radiobutton(mframe, value=1, variable=fromto, text="TO node")
+
 def browse_win():
     #open file browser window
     #choose file
@@ -39,16 +43,14 @@ def drawgraph(fileloc=''):
     #run it through histparse
     #call function to draw graph
     try:
-        if fileloc == '': fileloc = str(path.get())
-        histgraph = histparse(fileloc)
-        #need to pass histgraph to networkx functions
-        #print(histgraph)
+        if fileloc == '': fileloc = str(path.get()) #these two lines likely to be removed
+        histgraph = histparse(fileloc)              #due to everything moving into Graphistory
         g = Graphistory(fileloc)
-        urlfrom = str(url.get())
-        if(urlfrom == ''):
-            g.draw_from_site("facebook.com")
+        urlcenter = str(url.get())
+        if fromto == 0:
+            g.draw_from_site(urlcenter)
         else:
-            g.draw_from_site(urlfrom)
+            g.draw_to_site(urlcenter)
     except Exception as e:
         tkMessageBox.showerror(message=e)
     pass
@@ -63,6 +65,11 @@ path_entry.grid(column=1,row=2,padx='1c', pady='0.5c', columnspan=5, sticky=tk.E
 url_entry.grid(column=1, row=6, padx='1c', pady='0.5c', columnspan=5, sticky=tk.E+tk.W)
 path_label.grid(column=3, row=1)
 url_label.grid(column=3, row=5)
+from_rad.grid(column=1, row=7)
+to_rad.grid(column=5, row=7)
+
+url.set("google.com")
+from_rad.invoke()
 path_entry.focus()
 
 window.mainloop()
