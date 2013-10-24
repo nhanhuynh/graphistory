@@ -1,4 +1,4 @@
-#import histparse.py
+import histparse
 import Tkinter as tk
 import tkFileDialog
 import ttk
@@ -10,14 +10,15 @@ mframe.grid(column=0, row=0)
 mframe.columnconfigure(0, weight=1)
 mframe.rowconfigure(0,weight=1)
 
-path_entry = ttk.Entry(mframe) #need to add size and function when <return> is pushed, sothis needs to be worked with...
+path = tk.StringVar()
+path_entry = ttk.Entry(mframe, textvariable=path) #need to add size and function when <return> is pushed, sothis needs to be worked with...
 
 def browse_win():
     #open file browser window
     #choose file
     #put path to file in path_entry
-    path = tkFileDialog.askopenfilename()
-    path_entry["text"] = path
+    pathtmp = tkFileDialog.askopenfilename()
+    path.set(pathtmp)
 
 browse_button = ttk.Button(mframe, text="Browse", command=browse_win) #...as does this
 
