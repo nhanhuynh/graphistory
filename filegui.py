@@ -22,6 +22,9 @@ url = tk.StringVar()
 path_entry = ttk.Entry(mframe, textvariable=path, width=50)
 url_entry = ttk.Entry(mframe, textvariable=url, width=50)
 
+path_label = ttk.Label(mframe, text="History file location:")
+url_label = ttk.Label(mframe, text="Site to focus on:")
+
 def browse_win():
     #open file browser window
     #choose file
@@ -58,6 +61,8 @@ browse_button.grid(column=1, row=4, padx='1c', pady='0.25c', sticky=tk.E+tk.W)
 confirm_button.grid(column=5, row=4, padx='1c', pady='0.25c', sticky=tk.E+tk.W)
 path_entry.grid(column=1,row=2,padx='1c', pady='0.5c', columnspan=5, sticky=tk.E+tk.W+tk.N+tk.S)
 url_entry.grid(column=1, row=6, padx='1c', pady='0.5c', columnspan=5, sticky=tk.E+tk.W)
+path_label.grid(column=3, row=1)
+url_label.grid(column=3, row=5)
 path_entry.focus()
 
 window.mainloop()
