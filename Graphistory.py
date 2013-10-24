@@ -52,6 +52,4 @@ class Graphistory:
         nx.draw_networkx_labels(tmpGraph,pos,fontsize=14)
         plt.show()
 
-graph = Graphistory("History")
 
-graph.draw_from_site("www.facebook.com")
