@@ -26,8 +26,9 @@ def hist_read(histloc):
     elif count_ch > 0:
         hist_data = conn.execute("SELECT urls.url FROM urls, visits WHERE urls.id = visits.url ORDER BY visits.visit_time ASC;").fetchall()
     else:
-        print("Invalid file. Exiting")
-        sys.exit(1)
+        raise sqlite3.DatabaseError("Database is not recognized browser history file.")
+        #print("Invalid file. Exiting")
+        #sys.exit(1)
     return hist_data
 
 ###
