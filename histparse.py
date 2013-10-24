@@ -64,6 +64,9 @@ def graphmaker(hist_data):
             histcount[fromto] = 1
     return list(histcount.items())
 
+def histparse(histfile):
+    return graphmaker(hist_read(histfile))
+
 #This is for testing the module, feel free to ignore/tweak/whatever to do any kind of testing
 if __name__ == "__main__":
     histloc = os.path.expanduser(raw_input("What file would you like to analyze?\n"))
