@@ -14,7 +14,7 @@ top.columnconfigure(0, weight=1)
 mframe = ttk.Frame(window, padding='0.5c')
 mframe.grid(column=0, row=0)
 mframe.columnconfigure(0, weight=1)
-mframe.columnconfigure(3, pad='1.75i')
+#mframe.columnconfigure(3, pad='1.75i')
 mframe.rowconfigure(0,weight=1)
 
 path = tk.StringVar()
@@ -28,6 +28,10 @@ url_label = ttk.Label(mframe, text="Site to focus on:")
 fromto = tk.IntVar()
 from_rad = ttk.Radiobutton(mframe, value=0, variable=fromto, text="FROM node")
 to_rad = ttk.Radiobutton(mframe, value=1, variable=fromto, text="TO node")
+
+nodes = tk.IntVar()
+nodes_spin = tk.Spinbox(mframe, from_=1, to=50, width=2, textvariable=nodes)
+nodes_label = ttk.Label(mframe, text="Maximum number of nodes to display: ")
 
 def browse_win():
     #open file browser window
@@ -48,9 +52,9 @@ def drawgraph(fileloc=''):
         g = Graphistory(fileloc)
         urlcenter = str(url.get())
         if fromto == 0:
-            g.draw_from_site(urlcenter)
+            g.draw_from_site(urlcenter, number_of_node=nodes.get())
         else:
-            g.draw_to_site(urlcenter)
+            g.draw_to_site(urlcenter, number_of_node=nodes.get())
     except Exception as e:
         tkMessageBox.showerror(message=e)
     pass
@@ -67,7 +71,10 @@ path_label.grid(column=3, row=1)
 url_label.grid(column=3, row=5)
 from_rad.grid(column=1, row=7)
 to_rad.grid(column=5, row=7)
+nodes_spin.grid(column=4, row=8)
+nodes_label.grid(column=2, row=8, columnspan=2)
 
+nodes.set(10)
 url.set("google.com")
 from_rad.invoke()
 path_entry.focus()
