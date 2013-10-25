@@ -47,7 +47,7 @@ def drawgraph(fileloc=''):
         histgraph = histparse(fileloc)              #due to everything moving into Graphistory
         g = Graphistory(fileloc)
         urlcenter = str(url.get())
-        if fromto == 0:
+        if fromto.get() == 0:
             g.draw_from_site(urlcenter)
         else:
             g.draw_to_site(urlcenter)
