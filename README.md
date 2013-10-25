@@ -25,3 +25,7 @@ Current Issues
 --------------
 
 Currently, pages that are visited in sequence in the same browser session and those that are visited with the browser closed and reopened between visits are not distinguished due to having no way to really tell (as far as we know) when the browser was exited from outside the browser. It would be possible to be able to determine when a browser is open and when it isn't, but it would likely require an extension running inside the browser, which is beyond the scope of this project
+
+DEMO Video
+--------------
+http://www.youtube.com/watch?v=S5hSQN1ylR0&feature=youtube_gdata
